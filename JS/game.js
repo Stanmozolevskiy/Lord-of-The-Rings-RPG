@@ -41,12 +41,20 @@ $(document).ready(function () {
             enemyAttackBack: 5,
             info: "Lurtz was the first of Saruman's Uruks to be bred in Lord fo the Rings movie, choking the first orc he sees to death within seconds of his birth. Attempting to intervene, other orcs move towards the newly born Uruk-Hai warrior, but Saruman halts their advance, intrigued by the malice and violence present in the Uruk's blood, leaving the unfortunate orc to its fate."
         }
-
     }
-
+    // Will be populated when the player selects a character.
+    let attacker;
+    // Populated with all the characters the player didn't select.
+    let combatants = [];
+    // Will be populated when the player chooses an opponent.
+    let defender;
+    // Will keep track of turns during combat. Used for calculating player damage.
+    const turnCounter = 1;
+    // Tracks number of defeated opponents.
+    const killCount = 0;
 
     function createPlayerCard(character, randerArea) {
-        let charDiv = $("<div class= 'card' data-name='" + character.name + "'>");
+        let charDiv = $("<div class= 'character card' data-name='" + character.name + "'>");
         let charName = $("<div class='character-name'>").text(character.name);
         let charImage = $("<img alt='image' class='character-image'>").attr("src", character.imageUrl);
         let charHelth = $("<div class='character-health'>").text(character.health);
@@ -61,8 +69,74 @@ $(document).ready(function () {
     }
 
     initializeGame()
+    // This function handles updating the selected player or the current defender. If there is no selected player/defender this
+    // function will also place the character based on the areaRender chosen (e.g. #selected-character or #defender)
+    function updateCharacter(charObj, areaRender) {
+        $(areaRender).empty()
+        createPlayerCard(charObj, areaRender);
+    }
 
-    
+    function renderEnemies(enemyArr) {
+        for (let i = 0; i < enemyArr.length; i++) {
+            createPlayerCard(enemyArr[i], "#available-to-attack-section")
+        }
+    }
+    // Function to handle rendering game messages.
+    function renderMessage(message) {
+        const gameMessage = $("#game-message");
+        const newMessage = $("<div>").text(message);
+        gameMessage.append(newMessage)
+    }
+    // Function which handles restarting the game after victory or defeat.
+    function restatrtGame(resultMessage) {
+        const restart = $("<button>Restart</button>").click(() => {
+            location.reload()
+        })
+        // Build div that will display the victory/defeat message.
+        const gameState = $("<div>").text(resultMessage);
 
+        // Render the restart button and victory/defeat message to the page.
+        $("body").append(gameState);
+        $("body").append(restart);
+    };
+    // Function to clear the game message section
+    function clearMessage() {
+        const gameMessage = $("#game-message");
+        gameMessage.text("")
+    }
+    // =============== Game Starts Here ====================================================
 
+    // On click event for selecting our character.
+    $("#characters-section").on('click', '.character', function () {
+        //saving the picked character's name
+        let name = $(this).attr("data-name");
+        //if a player has not been chosen yet 
+        if (!attacker) {
+            // We populate attacker with the selected character's information.
+            attacker = characters[name];
+            // We then loop through the remaining characters and push them to the combatants array.
+            for (let key in characters) {
+                if (key !== name) {
+                    combatants.push(characters[key])
+                }
+            }
+            //Hide the characters section div.
+            $("#characters-section").hide();
+
+            // Then render our selected character and our combatants.
+            updateCharacter(attacker, "#selected-character");
+            renderEnemies(combatants);
+        }
+    })
+    //Create event hendler for all enemies 
+    $("#available-to-attack-section").on('click', '.character', function () {
+        let name = $(this).attr("data-name");
+        if($("#defender").children().length === 0){
+            defender = characters[name];
+            updateCharacter(defender, "#defender")
+            $(this).remove()
+            clearMessage();
+            $("#available-to-attack-section").hide()
+        }
+    })
 })
