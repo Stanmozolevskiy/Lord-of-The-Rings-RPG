@@ -3,9 +3,14 @@ body {
     background-size:cover ;
     height: 100%;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 100px 100px; 
-  }
-  
+    grid-template-rows: 100px 100px;
+}
+.game-message{
+    color: gold;
+    background: black;
+    font-weight: 600;
+    font-size: 120%
+}
 .card {
     display: inline-block;
     cursor: pointer;
@@ -45,3 +50,4 @@ img {
     width: 50%;
     padding: 10px;
 }
+

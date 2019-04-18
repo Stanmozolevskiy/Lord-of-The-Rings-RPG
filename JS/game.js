@@ -51,7 +51,10 @@ $(document).ready(function () {
     // Will keep track of turns during combat. Used for calculating player damage.
     const turnCounter = 1;
     // Tracks number of defeated opponents.
-    const killCount = 0;
+    let killCount = 0;
+    const attackBtn = $("#attack-button")
+    attackBtn.hide();
+
 
     function createPlayerCard(character, randerArea) {
         let charDiv = $("<div class= 'character card' data-name='" + character.name + "'>");
@@ -96,8 +99,8 @@ $(document).ready(function () {
         const gameState = $("<div>").text(resultMessage);
 
         // Render the restart button and victory/defeat message to the page.
-        $("body").append(gameState);
-        $("body").append(restart);
+        $("#restart").append(gameState);
+        $("#restart").append(restart);
     };
     // Function to clear the game message section
     function clearMessage() {
@@ -131,12 +134,60 @@ $(document).ready(function () {
     //Create event hendler for all enemies 
     $("#available-to-attack-section").on('click', '.character', function () {
         let name = $(this).attr("data-name");
-        if($("#defender").children().length === 0){
+        if ($("#defender").children().length === 0) {
             defender = characters[name];
             updateCharacter(defender, "#defender")
+
             $(this).remove()
             clearMessage();
-            $("#available-to-attack-section").hide()
+            $("#available-to-attack-section")
+            attackBtn.show().text("Attack" + " " + defender.name)
+
         }
     })
+    // Create event for the attack button 
+    attackBtn.on("click", function () {
+        //if enemy is selected then battle will start
+        if ($("#defender").children.length !== 0) {
+            // Creates messages for our attack and our opponents counter attack.
+            const attackMessage = `${attacker.name + 'attacked' + defender.name + attacker.attack + 'damage.'}`;
+            const counterAttackMessage = `${defender.name + " attacked you back for " + defender.enemyAttackBack + " damage."}`;
+            clearMessage()
+
+            // reduce defender's helth by the attacker's power
+            defender.health -= attacker.attack * turnCounter;
+
+            // If the enemy still has health..
+            if (defender.health > 0) {
+                // Render the enemy's updated character card.
+                updateCharacter(defender, "#defender");
+
+                // Render the combat messages.
+                renderMessage(attackMessage);
+                renderMessage(counterAttackMessage);
+
+                // Reduce your health by the opponent's attack value.
+                attacker.health -= defender.enemyAttackBack;
+                updateCharacter(attacker, "#selected-character")
+
+                // if you have less than 0 helth game over
+                if (attacker.health <= 0) {
+                    clearMessage();
+                    restatrtGame(attacker.name + " " + " have been defeted by" + " " + defender.name);
+                    attackBtn.off("click")
+                }
+            }
+            else {
+                // if emeny has less than 0 helth get new enemy
+                $("#defender").empty()
+                renderMessage(`${attacker.name + " " + "has defeted " + " " + defender.name}`);
+                // Increment your kill count.
+                killCount++;
+
+            }
+
+        }
+
+    })
+
 })
