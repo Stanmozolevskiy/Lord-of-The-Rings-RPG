@@ -3,7 +3,7 @@ $(document).ready(function () {
     const characters = {
         "Aragorn": {
             name: "Aragorn",
-            health: 120,
+            health: 80,
             attack: 8,
             imageUrl: "./Media/aragorn.jpg",
             enemyAttackBack: 15,
@@ -11,7 +11,7 @@ $(document).ready(function () {
         },
         "Gandalf": {
             name: "Gandalf",
-            health: 100,
+            health: 120,
             attack: 14,
             imageUrl: "./Media/gandalf.jpg",
             enemyAttackBack: 5,
@@ -19,7 +19,7 @@ $(document).ready(function () {
         },
         "Saruman": {
             name: "Saruman",
-            health: 100,
+            health: 160,
             attack: 14,
             imageUrl: "./Media/saruman.jpg",
             enemyAttackBack: 5,
@@ -27,7 +27,7 @@ $(document).ready(function () {
         },
         "Thranduil": {
             name: "Thranduil",
-            health: 100,
+            health: 130,
             attack: 14,
             imageUrl: "./Media/thranduil.jpg",
             enemyAttackBack: 5,
@@ -35,7 +35,7 @@ $(document).ready(function () {
         },
         "Lurtz": {
             name: "Lurtz",
-            health: 100,
+            health: 120,
             attack: 14,
             imageUrl: "./Media/lurtz.jpg",
             enemyAttackBack: 5,
@@ -49,10 +49,12 @@ $(document).ready(function () {
     // Will be populated when the player chooses an opponent.
     let defender;
     // Will keep track of turns during combat. Used for calculating player damage.
-    const turnCounter = 1;
+    let turnCounter = 1;
     // Tracks number of defeated opponents.
     let killCount = 0;
     const attackBtn = $("#attack-button")
+    const supperAtack = $("#supper-attack-button")
+    supperAtack.hide()
     attackBtn.hide();
 
 
@@ -86,8 +88,8 @@ $(document).ready(function () {
     }
     // Function to handle rendering game messages.
     function renderMessage(message) {
-        const gameMessage = $("#game-message");
-        const newMessage = $("<div>").text(message);
+        let gameMessage = $("#game-message");
+        let newMessage = $("<div>").text(message);
         gameMessage.append(newMessage)
     }
     // Function which handles restarting the game after victory or defeat.
@@ -142,6 +144,7 @@ $(document).ready(function () {
             clearMessage();
             $("#available-to-attack-section")
             attackBtn.show().text("Attack" + " " + defender.name)
+            supperAtack.show().text("supper")
 
         }
     })
@@ -150,13 +153,12 @@ $(document).ready(function () {
         //if enemy is selected then battle will start
         if ($("#defender").children.length !== 0) {
             // Creates messages for our attack and our opponents counter attack.
-            const attackMessage = `${attacker.name + 'attacked' + defender.name + attacker.attack + 'damage.'}`;
-            const counterAttackMessage = `${defender.name + " attacked you back for " + defender.enemyAttackBack + " damage."}`;
+            let attackMessage = `${attacker.name + " " + 'attacked' + " " + defender.name + " " + attacker.attack * turnCounter + " " + 'damage.'}`;
+            let counterAttackMessage = `${defender.name + " attacked you back for " + defender.enemyAttackBack + " damage."}`;
             clearMessage()
 
             // reduce defender's helth by the attacker's power
             defender.health -= attacker.attack * turnCounter;
-
             // If the enemy still has health..
             if (defender.health > 0) {
                 // Render the enemy's updated character card.
@@ -183,11 +185,23 @@ $(document).ready(function () {
                 renderMessage(`${attacker.name + " " + "has defeted " + " " + defender.name}`);
                 // Increment your kill count.
                 killCount++;
+                supperAtack.hide()
+                attackBtn.hide();
 
+                // if you kill all of the enemies 
+                if (killCount >= combatants.length) {
+                    clearMessage();
+                    attackBtn.off("click")
+                    restatrtGame('You won all heroes in midle erth')
+                }
             }
-
+            // Increment turn counter. This is used for determining how much damage the player does.
+            turnCounter++
         }
-
+        else {
+            //  If there is no defender, render an error message.
+            clearMessage();
+            renderMessage("Select enemy");
+        }
     })
-
 })
