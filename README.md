@@ -2,5 +2,5 @@
 
 <p align="center"> https://stanmozolevskiy.github.io/Lord-of-The-Rings-RPG/
 
-<p align="center"> ![Middle-Earth-RPG](Middle-Earth-RPG.gif)
+<p align="center"> ![Middle-Earth-RPG](Middle-Earth-RPG.gif) </p>
 
