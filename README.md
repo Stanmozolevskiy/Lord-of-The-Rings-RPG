@@ -2,4 +2,4 @@
 
 https://stanmozolevskiy.github.io/Lord-of-The-Rings-RPG/
 
-![Middle-Earth-RPG](Middle-Earth-RPG.jpg)
+![Middle-Earth-RPG](Middle-Earth-RPG.gif)
