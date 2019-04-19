@@ -29,7 +29,7 @@ $(document).ready(function () {
             name: "Witch King",
             health: 130,
             attack: 14,
-            imageUrl: "./Media/Witch King.jpg",
+            imageUrl: "./Media/witchking.jpg",
             enemyAttackBack: 5,
             info: "Thranduil is a fictional character in J. R. R. Tolkien's Middle-earth legendarium. He is a supporting character in The Hobbit, where he is referred to as the 'Elvenking,' and he is referenced briefly in The Lord of the Rings, The Silmarillion, and Unfinished Tales."
         },
