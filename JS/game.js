@@ -52,11 +52,6 @@ $(document).ready(function () {
     let turnCounter = 1;
     // Tracks number of defeated opponents.
     let killCount = 0;
-    const attackBtn = $("#attack-button")
-    const supperAtack = $("#supper-attack-button")
-    supperAtack.hide()
-    attackBtn.hide();
-
 
     function createPlayerCard(character, randerArea) {
         let charDiv = $("<div class= 'character card' data-name='" + character.name + "'>");
@@ -142,7 +137,7 @@ $(document).ready(function () {
                 }
             }
             //Hide the characters section div.
-            $("#characters-section").hide();
+            $("#characters-section").fadeOut();
 
             // Then render our selected character and our combatants.
             updateCharacter(attacker, "#selected-character");
@@ -157,16 +152,14 @@ $(document).ready(function () {
             playAudio(`${'./audio/'+ defender.name + ".mp3"}`, null, 0, 0.3)
             updateCharacter(defender, "#defender")
 
-            $(this).remove()
+            $(this).fadeOut()
             clearMessage();
             $("#available-to-attack-section")
-            attackBtn.show().text("Attack" + " " + defender.name)
-            supperAtack.show().text("supper")
 
         }
     })
     // Create event for the attack button 
-    attackBtn.on("click", function () {
+    $("#defender").on("click", function () {
         //if enemy is selected then battle will start
         if ($("#defender").children.length !== 0) {
             playAudio("./audio/atack.mp3", null, 0, 0.3)
@@ -174,7 +167,8 @@ $(document).ready(function () {
             let attackMessage = `${attacker.name + " " + 'attacked' + " " + defender.name + " " + attacker.attack * turnCounter + " " + 'damage.'}`;
             let counterAttackMessage = `${defender.name + " attacked you back for " + defender.enemyAttackBack + " damage."}`;
             clearMessage("./audio/atack.mp3", false, 100 )
-
+            $("#defender").effect('shake')
+            
             // reduce defender's helth by the attacker's power
             defender.health -= attacker.attack * turnCounter;
             // If the enemy still has health..
@@ -203,8 +197,6 @@ $(document).ready(function () {
                 renderMessage(`${attacker.name + " " + "has defeted " + " " + defender.name}`);
                 // Increment your kill count.
                 killCount++;
-                supperAtack.hide()
-                attackBtn.hide();
 
                 // if you kill all of the enemies 
                 if (killCount >= combatants.length) {
@@ -222,4 +214,6 @@ $(document).ready(function () {
             renderMessage("Select enemy");
         }
     })
+    
+
 })
