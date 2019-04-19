@@ -25,19 +25,19 @@ $(document).ready(function () {
             enemyAttackBack: 5,
             info: "Saruman the White is a fictional character and a major antagonist in J. R. R. Tolkien's fantasy novel The Lord of the Rings. He is leader of the Istari, wizards sent to Middle-earth in human form by the godlike Valar to challenge Sauron, the main antagonist of the novel, but eventually he desires Sauron's power for himself and tries to take over Middle-earth by force."
         },
-        "Thranduil": {
-            name: "Thranduil",
+        "Witch King": {
+            name: "Witch King",
             health: 130,
             attack: 14,
-            imageUrl: "./Media/thranduil.jpg",
+            imageUrl: "./Media/Witch King.jpg",
             enemyAttackBack: 5,
             info: "Thranduil is a fictional character in J. R. R. Tolkien's Middle-earth legendarium. He is a supporting character in The Hobbit, where he is referred to as the 'Elvenking,' and he is referenced briefly in The Lord of the Rings, The Silmarillion, and Unfinished Tales."
         },
-        "Lurtz": {
-            name: "Lurtz",
+        "Thorin": {
+            name: "Thorin",
             health: 120,
             attack: 14,
-            imageUrl: "./Media/lurtz.jpg",
+            imageUrl: "./Media/Thorin.jpg",
             enemyAttackBack: 5,
             info: "Lurtz was the first of Saruman's Uruks to be bred in Lord fo the Rings movie, choking the first orc he sees to death within seconds of his birth. Attempting to intervene, other orcs move towards the newly born Uruk-Hai warrior, but Saruman halts their advance, intrigued by the malice and violence present in the Uruk's blood, leaving the unfortunate orc to its fate."
         }
@@ -71,6 +71,19 @@ $(document).ready(function () {
         for (let key in characters) {
             createPlayerCard(characters[key], "#characters-section")
         }
+    }
+    function playAudio(audioLocation, repeat, delay, power) {
+        let audio = new Audio(audioLocation);
+        audio.volume = power;
+        setTimeout(function () {
+            if (repeat) {
+                audio.addEventListener('ended', function () {
+                    this.currentTime = 0;
+                    this.play();
+                }, false);
+            }
+            audio.play()
+        }, delay);
     }
 
     initializeGame()
@@ -110,6 +123,8 @@ $(document).ready(function () {
         gameMessage.text("")
     }
     // =============== Game Starts Here ====================================================
+    playAudio("./audio/gamesong.mp3", true, 1000, 0.2)
+
 
     // On click event for selecting our character.
     $("#characters-section").on('click', '.character', function () {
@@ -119,6 +134,7 @@ $(document).ready(function () {
         if (!attacker) {
             // We populate attacker with the selected character's information.
             attacker = characters[name];
+            playAudio(`${'./audio/'+ attacker.name + ".mp3"}`, null, 0, 0.3)
             // We then loop through the remaining characters and push them to the combatants array.
             for (let key in characters) {
                 if (key !== name) {
@@ -138,6 +154,7 @@ $(document).ready(function () {
         let name = $(this).attr("data-name");
         if ($("#defender").children().length === 0) {
             defender = characters[name];
+            playAudio(`${'./audio/'+ defender.name + ".mp3"}`, null, 0, 0.3)
             updateCharacter(defender, "#defender")
 
             $(this).remove()
@@ -152,10 +169,11 @@ $(document).ready(function () {
     attackBtn.on("click", function () {
         //if enemy is selected then battle will start
         if ($("#defender").children.length !== 0) {
+            playAudio("./audio/atack.mp3", null, 0, 0.3)
             // Creates messages for our attack and our opponents counter attack.
             let attackMessage = `${attacker.name + " " + 'attacked' + " " + defender.name + " " + attacker.attack * turnCounter + " " + 'damage.'}`;
             let counterAttackMessage = `${defender.name + " attacked you back for " + defender.enemyAttackBack + " damage."}`;
-            clearMessage()
+            clearMessage("./audio/atack.mp3", false, 100 )
 
             // reduce defender's helth by the attacker's power
             defender.health -= attacker.attack * turnCounter;
