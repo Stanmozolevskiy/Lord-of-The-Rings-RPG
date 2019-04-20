@@ -2,14 +2,23 @@ body {
     background: url(../Media/backround.jpg) no-repeat center center fixed;
     background-size:cover ;
     height: 100%;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 100px 100px;
+
+}
+.arena{
+    background: url(../Media/arena.jpg)  center center ;
+    height: 250px;
+    color: gold;
+    line-height: 30px;
+    font-weight: 600;
+    font-size: 120%;
+    padding: 70px 0;
+    border: 3px solid black;
 }
 .game-message{
-    color: gold;
     background: black;
     font-weight: 600;
-    font-size: 120%
+    font-size: 120%;
+    color: gold
 }
 .card {
     display: inline-block;
@@ -43,12 +52,21 @@ img {
     color: gold;
 }
 .characters-section{
-    align-items: flex-end
+    text-align: center;
+    margin-top: 50ps;
+}
+.avalable-to-atack{
+    text-align: center;
+    margin-top: 50ps;
 }
 .center {
-    margin: auto;
-    width: 50%;
-    padding: 10px;
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.row{
+    margin-top: 50px
 }
 
 

@@ -4,39 +4,39 @@ $(document).ready(function () {
         "Aragorn": {
             name: "Aragorn",
             health: 80,
-            attack: 8,
+            attack: 12,
             imageUrl: "./Media/aragorn.jpg",
             enemyAttackBack: 15,
             info: "Aragorn II, son of Arathorn is a fictional character from J. R. R. Tolkien's legendarium. He is one of the protagonists of The Lord of the Rings. Aragorn was a Ranger of the North, first introduced with the name Strider at Bree, as the Hobbits continued to call him throughout The Lord of the Rings. "
         },
         "Gandalf": {
             name: "Gandalf",
-            health: 120,
-            attack: 14,
+            health: 90,
+            attack: 5,
             imageUrl: "./Media/gandalf.jpg",
-            enemyAttackBack: 5,
+            enemyAttackBack: 16,
             info: "Gandalf is a fictional character in J. R. R. Tolkien's novels The Hobbit and The Lord of the Rings. He is a wizard, member of the Istari order, as well as leader of the Fellowship of the Ring and the army of the West. "
         },
         "Saruman": {
             name: "Saruman",
-            health: 160,
-            attack: 14,
+            health: 120,
+            attack: 7,
             imageUrl: "./Media/saruman.jpg",
-            enemyAttackBack: 5,
+            enemyAttackBack: 16,
             info: "Saruman the White is a fictional character and a major antagonist in J. R. R. Tolkien's fantasy novel The Lord of the Rings. He is leader of the Istari, wizards sent to Middle-earth in human form by the godlike Valar to challenge Sauron, the main antagonist of the novel, but eventually he desires Sauron's power for himself and tries to take over Middle-earth by force."
         },
         "Witch King": {
             name: "Witch King",
-            health: 130,
-            attack: 14,
+            health: 100,
+            attack: 5,
             imageUrl: "./Media/witchking.jpg",
-            enemyAttackBack: 5,
+            enemyAttackBack: 15,
             info: "Thranduil is a fictional character in J. R. R. Tolkien's Middle-earth legendarium. He is a supporting character in The Hobbit, where he is referred to as the 'Elvenking,' and he is referenced briefly in The Lord of the Rings, The Silmarillion, and Unfinished Tales."
         },
         "Thorin": {
             name: "Thorin",
-            health: 120,
-            attack: 14,
+            health: 50,
+            attack: 5,
             imageUrl: "./Media/Thorin.jpg",
             enemyAttackBack: 5,
             info: "Lurtz was the first of Saruman's Uruks to be bred in Lord fo the Rings movie, choking the first orc he sees to death within seconds of his birth. Attempting to intervene, other orcs move towards the newly born Uruk-Hai warrior, but Saruman halts their advance, intrigued by the malice and violence present in the Uruk's blood, leaving the unfortunate orc to its fate."
@@ -53,8 +53,9 @@ $(document).ready(function () {
     // Tracks number of defeated opponents.
     let killCount = 0;
 
+
     function createPlayerCard(character, randerArea) {
-        let charDiv = $("<div class= 'character card' data-name='" + character.name + "'>");
+        let charDiv = $("<div class= 'character card' id='" + character.name + "' data-name='" + character.name + "'>");
         let charName = $("<div class='character-name'>").text(character.name);
         let charImage = $("<img alt='image' class='character-image'>").attr("src", character.imageUrl);
         let charHelth = $("<div class='character-health'>").text(character.health);
@@ -105,10 +106,9 @@ $(document).ready(function () {
         const restart = $("<button>Restart</button>").click(() => {
             location.reload()
         })
-        // Build div that will display the victory/defeat message.
-        const gameState = $("<div>").text(resultMessage);
-
+    
         // Render the restart button and victory/defeat message to the page.
+        const gameState = $("<div>").text(resultMessage);
         $("#restart").append(gameState);
         $("#restart").append(restart);
     };
@@ -118,7 +118,7 @@ $(document).ready(function () {
         gameMessage.text("")
     }
     // =============== Game Starts Here ====================================================
-    playAudio("./audio/gamesong.mp3", true, 1000, 0.2)
+    playAudio("./audio/gamesong.mp3", true, 1000, 0.07)
 
 
     // On click event for selecting our character.
@@ -129,7 +129,8 @@ $(document).ready(function () {
         if (!attacker) {
             // We populate attacker with the selected character's information.
             attacker = characters[name];
-            playAudio(`${'./audio/'+ attacker.name + ".mp3"}`, null, 0, 0.3)
+            playAudio(`${'./audio/' + attacker.name + ".mp3"}`, null, 0, 0.2)
+            $("#selected-character").fadeIn()
             // We then loop through the remaining characters and push them to the combatants array.
             for (let key in characters) {
                 if (key !== name) {
@@ -137,7 +138,7 @@ $(document).ready(function () {
                 }
             }
             //Hide the characters section div.
-            $("#characters-section").fadeOut();
+            $("#characters-section").hide()
 
             // Then render our selected character and our combatants.
             updateCharacter(attacker, "#selected-character");
@@ -149,12 +150,10 @@ $(document).ready(function () {
         let name = $(this).attr("data-name");
         if ($("#defender").children().length === 0) {
             defender = characters[name];
-            playAudio(`${'./audio/'+ defender.name + ".mp3"}`, null, 0, 0.3)
+            playAudio(`${'./audio/' + defender.name + ".mp3"}`, null, 0, 0.2)
             updateCharacter(defender, "#defender")
-
             $(this).fadeOut()
             clearMessage();
-            $("#available-to-attack-section")
 
         }
     })
@@ -166,9 +165,9 @@ $(document).ready(function () {
             // Creates messages for our attack and our opponents counter attack.
             let attackMessage = `${attacker.name + " " + 'attacked' + " " + defender.name + " " + attacker.attack * turnCounter + " " + 'damage.'}`;
             let counterAttackMessage = `${defender.name + " attacked you back for " + defender.enemyAttackBack + " damage."}`;
-            clearMessage("./audio/atack.mp3", false, 100 )
+            clearMessage("./audio/atack.mp3", false, 100)
             $("#defender").effect('shake')
-            
+
             // reduce defender's helth by the attacker's power
             defender.health -= attacker.attack * turnCounter;
             // If the enemy still has health..
@@ -186,9 +185,10 @@ $(document).ready(function () {
 
                 // if you have less than 0 helth game over
                 if (attacker.health <= 0) {
+                    $("#defender").off("click")
                     clearMessage();
                     restatrtGame(attacker.name + " " + " have been defeted by" + " " + defender.name);
-                    attackBtn.off("click")
+                    defenderAtackBtn.off("click")
                 }
             }
             else {
@@ -197,14 +197,15 @@ $(document).ready(function () {
                 renderMessage(`${attacker.name + " " + "has defeted " + " " + defender.name}`);
                 // Increment your kill count.
                 killCount++;
-
-                // if you kill all of the enemies 
-                if (killCount >= combatants.length) {
-                    clearMessage();
-                    attackBtn.off("click")
-                    restatrtGame('You won all heroes in midle erth')
-                }
             }
+
+            // if you kill all of the enemies 
+            if (killCount >= combatants.length) {
+                clearMessage();
+                console.log(combatants.length, killCount)
+                restatrtGame('You won all heroes in midle erth')
+            }
+
             // Increment turn counter. This is used for determining how much damage the player does.
             turnCounter++
         }
@@ -214,6 +215,6 @@ $(document).ready(function () {
             renderMessage("Select enemy");
         }
     })
-    
+
 
 })
