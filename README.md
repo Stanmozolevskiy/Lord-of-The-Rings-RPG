@@ -8,10 +8,10 @@ https://stanmozolevskiy.github.io/Middle-Earth-RPG
 jQuery is designed to simplify HTML DOM tree traversal and manipulation, as well as event handling, CSS animation. It is free, open-source software using the permissive MIT License.
 </p>
 ## Methods used in this project.
-
+<br>
 - [x] .append()
 - [x] .empty()
-- [x] \(https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...in) for.. in  
+- [x]  for.. in  \(https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...in)  
 - [x] .on("click") and off("click")
 - [x] .hide()
 - [x] .fadeOut()
