@@ -11,7 +11,7 @@ jQuery is designed to simplify HTML DOM tree traversal and manipulation, as well
 
 - [x] .append()
 - [x] .empty()
-- [x] for.. in  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...in
+- [x] \(https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...in) for.. in  
 - [x] .on("click") and off("click")
 - [x] .hide()
 - [x] .fadeOut()
